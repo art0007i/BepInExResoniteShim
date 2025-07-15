@@ -12,15 +12,15 @@ namespace BepInEx_RML_Loader;
 [BepInPlugin(GUID, Name, Version)]
 public class BepInEx_RML_Loader : BasePlugin
 {
-    public const string GUID = "ea80b2e7-e0ca-4bec-bb89-38e129e25cb1";
-    public const string Name = "me.art0007i.bepinex_rml_loader";
-    public const string Version = "0.1.0";
+    public const string GUID = "me.art0007i.bepinex_rml_loader";
+    public const string Name = "BepInEx RML Loader";
+    public const string Version = "0.1.1";
 
     static ManualLogSource Logger = null!;
     public override void Load()
     {
         Logger = Log;
-        var harmony = new Harmony("me.art0007i.bepinex_rml_loader");
+        var harmony = new Harmony(GUID);
         harmony.PatchAll();
     }
 
