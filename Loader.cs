@@ -14,7 +14,7 @@ public class BepInEx_RML_Loader : BasePlugin
 {
     public const string GUID = "me.art0007i.bepinex_rml_loader";
     public const string Name = "BepInEx RML Loader";
-    public const string Version = "0.1.1";
+    public const string Version = "0.2.0";
 
     static ManualLogSource Logger = null!;
     public override void Load()
@@ -24,13 +24,12 @@ public class BepInEx_RML_Loader : BasePlugin
         harmony.PatchAll();
     }
 
-    [HarmonyPatch(typeof(GraphicalClient.GraphicalClientRunner), nameof(GraphicalClient.GraphicalClientRunner.AssemblyDirectory), MethodType.Getter)]
+    [HarmonyPatch(typeof(GraphicalClient.GraphicalClientRunner), MethodType.StaticConstructor)]
     public class AppPathFixer
     {
-        public static bool Prefix(ref string __result)
+        public static void Postfix(ref string ___AssemblyDirectory)
         {
-            __result = Paths.GameRootPath;
-            return false;
+            ___AssemblyDirectory = Paths.GameRootPath;
         }
     }
 
