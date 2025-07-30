@@ -14,7 +14,7 @@ public class BepInEx_RML_Loader : BasePlugin
 {
     public const string GUID = "me.art0007i.bepinex_rml_loader";
     public const string Name = "BepInEx RML Loader";
-    public const string Version = "0.2.0";
+    public const string Version = "0.3.0";
 
     static ManualLogSource Logger = null!;
     public override void Load()
@@ -33,36 +33,12 @@ public class BepInEx_RML_Loader : BasePlugin
         }
     }
 
-    [HarmonyPatch(typeof(Engine), "InitializeFrooxEngine")]
-    public class RmlInit
-    {
-        public static void Postfix(ref Task __result)
-        {
-            var res = __result;
-            var newTask = Task.Run(async () =>
-            {
-                await res;
-
-                var asm = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(x => x.GetName().Name == "ResoniteModLoader");
-                if(asm == null)
-                {
-                    Logger.LogWarning("Failed to initialize ResoniteModLoader: ResoniteModLoader.dll is not loaded!");
-                    return;
-                }
-                var hook = asm.GetType("ResoniteModLoader.ExecutionHook");
-                AccessTools.Field(hook, "__connectorType").SetValue(null, typeof(bool));
-            });
-
-            __result = newTask;
-        }
-    }
-
     [HarmonyPatch]
     public class LocationFixer
     {
         public static MethodBase TargetMethod()
         {
-            return AccessTools.FirstConstructor(typeof(AssemblyTypeRegistry), (x)=>x.GetParameters().Length > 3);
+            return AccessTools.FirstConstructor(typeof(AssemblyTypeRegistry), (x) => x.GetParameters().Length > 3);
         }
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> codes)
         {
@@ -88,7 +64,7 @@ public class BepInEx_RML_Loader : BasePlugin
                 {
                     yield return code;
                 }
-                if(code.Calls(cachePath))
+                if (code.Calls(cachePath))
                 {
                     Logger.LogDebug("Patched CachePath");
 
@@ -119,7 +95,7 @@ public class BepInEx_RML_Loader : BasePlugin
             var loadFrom = AccessTools.Method(typeof(Assembly), nameof(Assembly.LoadFrom), [typeof(string)]);
             foreach (var code in codes)
             {
-                if(code.Calls(loadFrom))
+                if (code.Calls(loadFrom))
                 {
                     yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(AssemblyLoadFixer), nameof(LoadFrom)));
                 }
