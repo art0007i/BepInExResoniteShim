@@ -13,7 +13,7 @@
 
 	<ItemGroup>
 		<Reference Include="Resonite">
-			<HintPath>$(GamePath)Resonite.dll</HintPath>
+			<HintPath>$(GamePath)Renderite.Host.dll</HintPath>
 		</Reference>
 		<Reference Include="FrooxEngine">
 			<HintPath>$(GamePath)FrooxEngine.dll</HintPath>
