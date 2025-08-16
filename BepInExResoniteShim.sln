@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35825.156 d17.13
+VisualStudioVersion = 17.13.35825.156
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BepInEx_RML_Loader", "BepInEx_RML_Loader.csproj", "{1E65DF6A-E53B-4EC2-88B4-83800D69B42C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BepInExResoniteShim", "BepInExResoniteShim.csproj", "{1E65DF6A-E53B-4EC2-88B4-83800D69B42C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

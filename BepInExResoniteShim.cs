@@ -3,17 +3,18 @@ using BepInEx.Logging;
 using BepInEx.NET.Common;
 using FrooxEngine;
 using HarmonyLib;
+using Renderite.Host;
 using System.Reflection;
 using System.Reflection.Emit;
 
-namespace BepInEx_RML_Loader;
+namespace BepInExResoniteShim;
 
 
 [BepInPlugin(GUID, Name, Version)]
-public class BepInEx_RML_Loader : BasePlugin
+public class BepInExResoniteShim : BasePlugin
 {
-    public const string GUID = "me.art0007i.bepinex_rml_loader";
-    public const string Name = "BepInEx RML Loader";
+    public const string GUID = "me.art0007i.bepinex_resonite_shim";
+    public const string Name = "BepInEx Resonite Shim";
     public const string Version = "0.3.0";
 
     static ManualLogSource Logger = null!;
@@ -24,7 +25,7 @@ public class BepInEx_RML_Loader : BasePlugin
         harmony.PatchAll();
     }
 
-    [HarmonyPatch(typeof(GraphicalClient.GraphicalClientRunner), MethodType.StaticConstructor)]
+    [HarmonyPatch(typeof(GraphicalClientRunner), MethodType.StaticConstructor)]
     public class AppPathFixer
     {
         public static void Postfix(ref string ___AssemblyDirectory)
@@ -108,7 +109,7 @@ public class BepInEx_RML_Loader : BasePlugin
 
         public static Assembly? LoadFrom(string path)
         {
-            Logger.LogInfo("Bypassing LoadFrom: " + path);
+            Logger.LogDebug("Bypassing LoadFrom: " + path);
             return null;
         }
     }
