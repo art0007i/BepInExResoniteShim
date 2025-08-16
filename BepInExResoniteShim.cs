@@ -15,7 +15,7 @@ public class BepInExResoniteShim : BasePlugin
 {
     public const string GUID = "me.art0007i.bepinex_resonite_shim";
     public const string Name = "BepInEx Resonite Shim";
-    public const string Version = "0.3.0";
+    public const string Version = "0.4.0";
 
     static ManualLogSource Logger = null!;
     public override void Load()
