@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>0.4.0</Version>
+    <Version>0.5.0</Version>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -15,9 +15,12 @@
     <Reference Include="Resonite">
       <HintPath>$(GamePath)Renderite.Host.dll</HintPath>
     </Reference>
-    <Reference Include="FrooxEngine">
-      <HintPath>$(GamePath)FrooxEngine.dll</HintPath>
-    </Reference>
+		<Reference Include="FrooxEngine">
+			<HintPath>$(GamePath)FrooxEngine.dll</HintPath>
+		</Reference>
+		<Reference Include="Elements.Core">
+			<HintPath>$(GamePath)Elements.Core.dll</HintPath>
+		</Reference>
     <Reference Include="0Harmony">
       <HintPath>$(GamePath)BepInEx\core\0Harmony.dll</HintPath>
     </Reference>

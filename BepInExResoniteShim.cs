@@ -1,28 +1,60 @@
 ﻿using BepInEx;
+using BepInEx.Configuration;
 using BepInEx.Logging;
 using BepInEx.NET.Common;
+using Elements.Core;
 using FrooxEngine;
 using HarmonyLib;
 using Renderite.Host;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Reflection.Metadata.Ecma335;
 
 namespace BepInExResoniteShim;
 
+public abstract class BaseResonitePlugin : BasePlugin
+{
+    public abstract string Author { get; }
+    public abstract string Link { get; }
+}
+
 
 [BepInPlugin(GUID, Name, Version)]
-public class BepInExResoniteShim : BasePlugin
+public class BepInExResoniteShim : BaseResonitePlugin
 {
     public const string GUID = "me.art0007i.bepinex_resonite_shim";
     public const string Name = "BepInEx Resonite Shim";
     public const string Version = "0.4.0";
+    public override string Author => "art0007i";
+    public override string Link => "https://github.com/art0007i/BepInExResoniteShim";
 
     static ManualLogSource Logger = null!;
+
+
     public override void Load()
     {
+        Type? lastAttempted = null;
+        try
+        {
+            var types = GenericTypesAttribute.GetTypes(GenericTypesAttribute.Group.EnginePrimitives);
+            foreach (var type in types)
+            {
+                lastAttempted = type;
+                if (TomlTypeConverter.CanConvert(type)) continue;
+                TomlTypeConverter.AddConverter(type, new TypeConverter
+                {
+                    ConvertToString = (obj, type) => (string) typeof(Coder<>).MakeGenericType(type).GetMethod("EncodeToString")!.Invoke(null, [obj])!,
+                    ConvertToObject = (str, type) => typeof(Coder<>).MakeGenericType(type).GetMethod("DecodeFromString")!.Invoke(null, [str])!,
+                });
+            }
+        }
+        catch (Exception e)
+        {
+            Logger.LogError($"Failed to register generic type converters (Last attempted = {lastAttempted?.ToString() ?? "NULL"}): " + e);
+        }
+
         Logger = Log;
-        var harmony = new Harmony(GUID);
-        harmony.PatchAll();
+        HarmonyInstance.PatchAll();
     }
 
     [HarmonyPatch(typeof(GraphicalClientRunner), MethodType.StaticConstructor)]
